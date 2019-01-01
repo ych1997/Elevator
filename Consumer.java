@@ -7,10 +7,10 @@ public class Consumer implements Runnable{
 	}
 	public void run(){
 		while(true){
+			int x=Poisson(5.0)*1000;
+			//System.out.println(x);
 		try{
-			double x=(2)* Math.log(ran.nextInt(3)+1);
-			//System.out.println("x:"+x);
-			Thread.sleep((long)x*2000);
+			Thread.sleep(x);
 		}
 		catch(InterruptedException e){
 			e.printStackTrace();
@@ -31,4 +31,20 @@ public class Consumer implements Runnable{
 
 	}
 }
+public int Poisson(double lambda){
+	double L = Math.exp(-lambda);
+	double p =1.0;
+	int k=0;
+	while(true) {
+		p=p*Math.random();
+		k++;
+		if(p<=L) {
+			break;
+		}
+	}			
+	//	System.out.println(Math.random()+" "+L);
+
+	return k-1;
+}
+
 }

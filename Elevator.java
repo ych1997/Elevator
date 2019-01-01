@@ -10,6 +10,7 @@ public class Elevator{
 		user_inf[Waiting][2]=arr[2];
 		user_inf[Waiting][3]=index;
 		System.out.println("Set! "+user_inf[Waiting][0]+" "+user_inf[Waiting][1]+" "+user_inf[Waiting][2]+" "+user_inf[Waiting][3]);
+
 		Waiting++;
 		index++;
 	}
@@ -20,7 +21,7 @@ public class Elevator{
 		return Floor_Num;
 	}
 	public synchronized boolean go_up(){ //檢查上面的人有沒有要搭電梯
-		for(int i=Waiting;i>=0;i--){
+		for(int i=0;i<Waiting;i++){
 			if(user_inf[i][0]>=now_floor){
 				return true;
 			}
@@ -28,7 +29,7 @@ public class Elevator{
 		return false;
 	}
 	public synchronized boolean go_down(){//檢查下面的人有沒有要搭電梯
-		for(int i=Waiting;i>=0;i--){
+		for(int i=0;i<Waiting;i++){
 			if(user_inf[i][0]<=now_floor){
 				return true;
 			}
@@ -36,19 +37,25 @@ public class Elevator{
 		return false;
 	}
 	public synchronized void check_out(){//有沒有人要下電梯
+		boolean get_off=false;
 		for(int i=0;i<num_in_ele;i++){
 			//System.out.println(now_floor+" "+user_inf[i][0]+" "+user_inf[i][2]+" "+Direction);
 			if(in_Ele[i][1]==now_floor){
 				System.out.println("Number "+in_Ele[i][3]+" get off elevator");
-				for(int j=i;j<num_in_ele;j++){
+				for(int j=i;j<=num_in_ele;j++){
 					 System.arraycopy(in_Ele[j+1],0,in_Ele[j],0,4);
 				}
 				num_in_ele--;
+				get_off=true;
 				i=-1;
 			}
 		}
+		if(get_off==true){
+				sleep(500);
+			}
 	}
 	public synchronized void up_in(){//往上的人有沒有要進電梯
+		boolean get_in=false;
 		for(int i=0;i<Waiting;i++){
 		//	System.out.println(now_floor+" "+user_inf[i][0]+" "+user_inf[i][2]+" "+Direction);
 			if(user_inf[i][0]==now_floor&&user_inf[i][2]==Direction/*!!!*/){
@@ -58,14 +65,13 @@ public class Elevator{
 				for(int j=i;j<Waiting;j++){
 					System.arraycopy(user_inf[j+1],0,user_inf[j],0,4);
 				}
+				get_in=true;
 				Waiting--;
 				i=-1;
 		}
-	/*			System.out.println("After removing");
-			for(int j=0;j<Waiting;j++){
-				System.out.println("Number "+user_inf[j][3]+" waits at "+user_inf[j][0]);
-			}	
-	*/		
+		if(get_in==true){
+				sleep(500);
+			}		
 		}
 	}
 
@@ -102,20 +108,22 @@ public class Elevator{
 		}
 		return false;
 	}
-
 	public void start(){
 		while(true){
 		if(Direction==0){
 			if(Waiting==0){
 				//System.out.println("Elevator stay at "+now_floor+" floor");
-				sleep();
+				sleep(1000);
 			}
 			else{
-				if(go_up()==true){ //如果上面有人要搭電梯
+				if(go_up()==true){ //如果上面有人要搭電梯					
 					Direction=1;
 				}
 				else if(go_down()==true){ //如果下面有人要搭電梯
 					Direction=-1;
+				}
+				else{
+					sleep(1000);
 				}
 			}
 		}
@@ -123,24 +131,23 @@ public class Elevator{
 		//	System.out.println("Elevator arrive at "+now_floor+" floor (go up)");
 			check_out();//check if anyone arrive their floor
 			if(go_up()==true){ //上面有人要搭電梯的話 確認該樓層是否有人要搭電梯
+				System.out.println("go_up");
 				up_in();
+				if(num_in_ele==0&&up_user()==false){
+					Direction=-1;
+					down_in();
+				}	
 			}
-			if(Waiting==0&&num_in_ele==0){ //沒有人在等待電梯 電梯裡也沒有人 電梯休息
-				now_floor--;
+			else if(Waiting==0&&num_in_ele==0){ //沒有人在等待電梯 電梯裡也沒有人 電梯休息	
+				//now_floor--;
 				Direction=0;
-
 			}
-			if(num_in_ele==0&&up_user()==true){ //電梯裡沒有人 可是上面還有人在等電梯
-			//	System.out.println("Elevator stay at "+now_floor+" floor");
-				check_out();
-				down_in(); 
-			}
-			if(num_in_ele==0&&up_user()==false&&down_user()==true){ //電梯裡沒有人 往上沒有人要搭電梯 但有下面的人在等電梯
+			else if(go_up()==false&&down_user()==true&&num_in_ele==0){
+				System.out.println("ooo");
 				Direction=-1;
-				now_floor--;
 			}
-			now_floor++;
-			
+		//System.out.println(Direction+" "+now_floor);
+			now_floor+=Direction;
 			if(now_floor>=Floor_Num){
 				now_floor=Floor_Num;
 				Direction=-1;
@@ -150,34 +157,35 @@ public class Elevator{
 		//	System.out.println("Elevator arrives at "+now_floor+" floor (go down)");
 			check_out();
 			if(go_down()==true){ //如果下面有人要搭電梯
+				System.out.println("go_down");
 				down_in();
+				if(num_in_ele==0&&down_user()==false){
+					Direction=1;
+					up_in();
+				}
 			}
-			if(Waiting==0&&num_in_ele==0){ //沒有人在等電梯 而且電梯裡沒有人 電梯休息
+			else if(Waiting==0&&num_in_ele==0){ //沒有人在等電梯 而且電梯裡沒有人 電梯休息
 				Direction=0;
-				now_floor++;
+				//now_floor++;
 			}
-			if(num_in_ele==0&&down_user()==true){ //電梯裡沒有人 但往下有人在等電梯
-			//	System.out.println("Elevator stay at "+now_floor+" floor");
-				up_in();
-				check_out();
-			}
-			if(num_in_ele==0&&down_user()==false&&up_user()==true){ //電梯裡沒有人 往下沒有人要搭電梯 但上面有人在等電梯
+			else if(go_down()==false&&up_user()==true&&num_in_ele==0){
+				//System.out.println("ooo");
 				Direction=1;
-				now_floor++;
 			}
-			now_floor--;
+			now_floor+=Direction;
 			if(now_floor<=1){
 				Direction=1;
 				now_floor=1;
 			}
+			System.out.println(Direction+" "+now_floor);  
 		}
 		Print();
 		count++;
-		sleep(); 
+		sleep(1000); 
 		}	
 	}
 	public void Print(){
-		System.out.println("-------------------------");
+		System.out.println("******************");
 		System.out.println("Time: "+count);
 		for(int i=0;i<Floor_Num;i++){
 			if(i!=now_floor-1){
@@ -206,10 +214,11 @@ public class Elevator{
 			}
 
 		}
+		System.out.println("******************");
 	}
-	public void sleep(){
+	public void sleep(int a){
 		try {
-			Thread.sleep(100);
+			Thread.sleep(a);
 		} 
 		catch (InterruptedException e) {
 			e.printStackTrace();
