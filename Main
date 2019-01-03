@@ -1,0 +1,472 @@
+package application;	
+import javafx.animation.TranslateTransition;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.geometry.Bounds;
+
+public class Main extends Application {
+	
+	public Scene scene;
+	public Stage stage;
+	public Pane pane;
+	ImageView ele = new ImageView();
+	TranslateTransition move_ele = new TranslateTransition(); //elevator goes up and down
+	// i'm not sure whether the elevator should be global or local. 
+	// so i also leave declarations in each method concerned.
+	public ImageView[] image = new ImageView[1000] ; // psgrs_in
+	public ImageView[] image_out = new ImageView[1000] ;  //psgrs_out
+	public int i,j = 0;
+	
+	public Scene scene() {
+		if (scene==null){
+			scene = new Scene(pane(), 900, 650);
+		}
+		return scene;
+	}
+	public Pane pane() {
+		if (pane==null) {
+			pane = new Pane();
+		}
+		return pane;
+	}
+	
+	public ImageView image() { //¥Í¦¨¶i¹q±èªº¤H
+		if (image[i]==null) {
+			image[i] = new ImageView();
+		}
+		return image[i];
+	}
+	
+	public ImageView image_out() { //¥Í¦¨¥X¹q±èªº¤H
+		if (image_out[i]==null) {
+			image_out[i] = new ImageView();
+		}
+		return image_out[i];
+	}
+	
+/******************************Enter the Elevator******************************/	
+	public void newTo1() {  //¦³¤H­n¨ì¤@¼Óªº¸Ü¡A¦b³o­Ó¤Hªº°_ÂI¼Ó¼h¥Í¦¨¤@°¦¨ëç³
+		image[i] = image();
+		image[i].setImage(new Image("file:src/image/hedgehog1.png"));
+		image[i].setFitWidth(70);
+		image[i].setFitHeight(73);
+	}
+	public void newTo2() {  //¦³¤H­n¨ì¤G¼Óªº¸Ü¥Í¦¨¤@°¦ÄH³½
+		image[i] = image();
+		image[i].setImage(new Image("file:src/image/whale2.png"));
+		image[i].setFitWidth(80);
+		image[i].setFitHeight(80);
+	}
+	public void newTo3() {  //¦³¤H­n¨ì¤T¼Óªº¸Ü¥Í¦¨¤@°¦ª°¯W
+		image[i] = image();
+		image[i].setImage(new Image("file:src/image/pig3.png"));
+		image[i].setFitWidth(78);
+		image[i].setFitHeight(78);
+	}
+	public void newTo4() {  //¦³¤H­n¨ì¥|¼Óªº¸Ü¥Í¦¨¤@°¦ª°¯W
+		image[i] = image();
+		image[i].setImage(new Image("file:src/image/fox4.png"));
+		image[i].setFitWidth(80);
+		image[i].setFitHeight(80);
+	}
+	public void newTo5() {  //¦³¤H­n¨ì¤­¼Óªº¸Ü¥Í¦¨¤@°¦¤pÂû
+		image[i] = image();
+		image[i].setImage(new Image("file:src/image/chick5.png"));
+		image[i].setFitWidth(80);
+		image[i].setFitHeight(80);
+	}
+	public void newTo6() {  //¦³¤H­n¨ì¤»¼Óªº¸Ü¥Í¦¨¤@°¦µL§Àºµ
+		image[i] = image();
+		image[i].setImage(new Image("file:src/image/koala6.png"));
+		image[i].setFitWidth(80);
+		image[i].setFitHeight(80);
+	}
+	
+	public void loc1() {  //§â¦b¤@¼Ó«ö¹q±èªº¤H(¥i¯à¬O¥ô¦ó¤@ºØ°Êª«)©ñ¦b¤@¼Ó±Æ¶¤
+		image[i].setLayoutX(250);
+		image[i].setLayoutY(505);
+	}
+	public void loc2() {  //¥H¦¹Ãþ±À
+		image[i].setLayoutX(250);
+		image[i].setLayoutY(420);
+	}
+	public void loc3() {
+		image[i].setLayoutX(250);
+		image[i].setLayoutY(330);
+	}
+	public void loc4() {
+		image[i].setLayoutX(250);
+		image[i].setLayoutY(245);
+	}
+	public void loc5() {
+		image[i].setLayoutX(250);
+		image[i].setLayoutY(155);
+	}
+	public void loc6() {
+		image[i].setLayoutX(250);
+		image[i].setLayoutY(65);
+	}
+	
+	public void addToPane() {  //§â­è­è¥Í¦¨¨Ã¥B³]©w¦n¦ì¸mªº¤H©ñ¨ìµe­±¤W
+		pane().getChildren().add(image[i]);
+		i++;
+	}
+/******************************Enter the Elevator******************************/	
+	
+/******************************Leave the Elevator******************************/
+/**There are no "locX" when leaving elevator because each kind of animal appears at its own exit**/
+	public void newTo1_out() {  //¦³¤H­n¥X¤@¼Óªº¸Ü¡A¦b¤@¼Ó¥Í¦¨¤@°¦¨ëç³¡A©ñ¦b¤@¼Ó¥X¤f
+		image_out[j] = image();
+		image_out[j].setImage(new Image("file:src/image/hedgehog1.png"));
+		image_out[j].setFitWidth(70);
+		image_out[j].setFitHeight(73);
+		
+		image_out[j].setLayoutX(420);
+		image_out[j].setLayoutY(505);
+	}
+	public void newTo2_out() {  //¦³¤H­n¥X¤G¼Óªº¸Ü¥Í¦¨¤@°¦ÄH³½©ñ¦b¤G¼Ó¥X¤f
+		image_out[j] = image();
+		image_out[j].setImage(new Image("file:src/image/whale2.png"));
+		image_out[j].setFitWidth(80);
+		image_out[j].setFitHeight(80);
+		
+		image_out[j].setLayoutX(420);
+		image_out[j].setLayoutY(420);
+	}
+	public void newTo3_out() {  //¦³¤H­n¥X¤T¼Óªº¸Ü¥Í¦¨¤@°¦ª°¯W©ñ¦b¤T¼Ó¥X¤f
+		image_out[j] = image();
+		image_out[j].setImage(new Image("file:src/image/pig3.png"));
+		image_out[j].setFitWidth(78);
+		image_out[j].setFitHeight(78);
+		
+		image_out[j].setLayoutX(420);
+		image_out[j].setLayoutY(330);
+	}
+	public void newTo4_out() {  //¦³¤H­n¥X¥|¼Óªº¸Ü¥Í¦¨¤@°¦ª°¯W©ñ¦b¥|¼Ó¥X¤f
+		image_out[j] = image();
+		image_out[j].setImage(new Image("file:src/image/fox4.png"));
+		image_out[j].setFitWidth(80);
+		image_out[j].setFitHeight(80);
+		
+		image_out[j].setLayoutX(420);
+		image_out[j].setLayoutY(245);
+	}
+	public void newTo5_out() {  //¦³¤H­n¥X¤­¼Óªº¸Ü¥Í¦¨¤@°¦¤pÂû©ñ¦b¤­¼Ó¥X¤f
+		image_out[j] = image();
+		image_out[j].setImage(new Image("file:src/image/chick5.png"));
+		image_out[j].setFitWidth(80);
+		image_out[j].setFitHeight(80);
+		
+		image_out[j].setLayoutX(420);
+		image_out[j].setLayoutY(155);
+	}
+	public void newTo6_out() {  //¦³¤H­n¥X¤»¼Óªº¸Ü¥Í¦¨¤@°¦µL§Àºµ©ñ¦b¤»¼Ó¥X¤f
+		image_out[j] = image();
+		image_out[j].setImage(new Image("file:src/image/koala6.png"));
+		image_out[j].setFitWidth(80);
+		image_out[j].setFitHeight(80);
+	
+		image_out[j].setLayoutX(420);
+		image_out[j].setLayoutY(65);
+	}
+	
+
+	public void addToPane_out() {  //§â­è­è¥Í¦¨¨Ã¥B³]©w¦n¦ì¸mªº¤H©ñ¨ìµe­±¤W
+		pane().getChildren().add(image_out[j]);
+		j++;
+	}
+/******************************Leave the Elevator******************************/		
+	
+
+/******************************Elevator move_ele******************************/	
+	public void upTo2() {  //¥H¤@¼Ó¬°°ò·ÇÂI¤W¤É¨ì¤G¼Óªº¦ì¸m
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(-90);
+		move_ele.play();
+		move_ele.setOnFinished(e->upTo3());  //³o­Ó³Ì«á·|§R±¼
+	}
+	public void upTo3() {  //¥H¤@¼Ó¬°°ò·ÇÂI¤W¤É¨ì¤T¼Óªº¦ì¸m
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(-180);
+		move_ele.play();
+		move_ele.setOnFinished(e->upTo4());
+	}
+	public void upTo4() {
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(-270);
+		move_ele.play();
+		move_ele.setOnFinished(e->upTo5());
+	}
+	public void upTo5() {
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(-360);
+		move_ele.play();
+		move_ele.setOnFinished(e->upTo6());
+	}
+	public void upTo6() {
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(-450);
+		move_ele.play();
+		move_ele.setOnFinished(e->downTo5());
+	}	
+	
+	public void downTo5() {
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(-360);
+		move_ele.play();
+		move_ele.setOnFinished(e->downTo4());
+	}
+	public void downTo4() {
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(-270);
+		move_ele.play();
+		move_ele.setOnFinished(e->downTo3());
+	}
+	public void downTo3() {
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(-180);
+		move_ele.play();
+		move_ele.setOnFinished(e->downTo2());
+	}
+	public void downTo2() {
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(-90);
+		move_ele.play();
+		move_ele.setOnFinished(e->downTo1());
+	}
+	public void downTo1() {
+		//TranslateTransition move_ele = new TranslateTransition();
+		move_ele.setNode(ele);
+		move_ele.setCycleCount(1);
+		move_ele.setDuration(Duration.seconds(1));
+		move_ele.setToY(0);
+		move_ele.play();
+	}
+/******************************Elevator move_ele******************************/
+
+/*******************psg enter/leave the elevator*******************/
+	//­¼«È±q±Æ¶¤¦ì¸m¦V¥k²¾165³æ¦ì¨ì¹q±è¤¤¡A¨ì©wÂI«á®ø¥¢
+	public void enter(ImageView img) {  
+		TranslateTransition move_enter = new TranslateTransition();
+		move_enter.setNode(img);
+		move_enter.setCycleCount(1);
+		move_enter.setDuration(Duration.seconds(1));
+		move_enter.setToX(165);
+		move_enter.play();
+	}
+	//­¼«È±q¹q±è¤¤¦V¥k²¾300(¥i½Õ¾ã)³æ¦ìµM«á®ø¥¢
+	public void leave(ImageView img) {  
+		TranslateTransition move_enter = new TranslateTransition();
+		move_enter.setNode(img);
+		move_enter.setCycleCount(1);
+		move_enter.setDuration(Duration.seconds(1));
+		move_enter.setToX(300);
+		move_enter.play();
+	}
+/*******************psg enter/leave the elevator*******************/	
+	
+	
+/*****************delete object*******************/
+	//¥i¥Hª½±µ¼g¸Ì­±ªº¡A§Ú¥u¬O·Q¼Ð¥Ü
+	public void deleteObj(ImageView img) {
+		pane.getChildren().remove(img);
+	}
+/*****************delete object*******************/
+
+
+	//·Q¿W¥ß¥X¨Ó¼g¦]¬°¹q±è¥i¯à»Ý­nnew¦n´X¦¸¡A­n¬Ý«ç»òµ²¦X«áºÝ¨M©w¤É­°ªºÅÞ¿è
+	//²{¦b¼g¦bstart¸Ì­±¤]¥i¥H¶]
+	public void init_ele() {
+		ele.setImage(new Image("file:src/image/elevator.png"));  //
+		ele.setFitWidth(100);
+		ele.setFitHeight(90);
+		ele.setLayoutX(400);
+		ele.setLayoutY(505);
+	}
+	
+
+	@Override
+	public void start(Stage primaryStage) {
+		/************************ set background **************************/
+		ImageView bg = new ImageView();
+		bg.setImage(new Image("file:src/image/roughGray.jpg"));
+		bg.setFitWidth(900);
+		bg.setFitHeight(700);
+		bg.setLayoutY(0);
+		
+		ImageView floors = new ImageView();
+		floors.setImage(new Image("file:src/image/floors.png"));
+		floors.setFitWidth(900);
+		floors.setFitHeight(600);
+		floors.setLayoutY(20);
+		
+		ImageView one = new ImageView();
+		one.setImage(new Image("file:src/image/one-1.png"));
+		one.setFitWidth(45);
+		one.setFitHeight(45);
+		one.setLayoutX(850);
+		one.setLayoutY(509);
+		ImageView two = new ImageView();
+		two.setImage(new Image("file:src/image/two-1.png"));
+		two.setFitWidth(45);
+		two.setFitHeight(45);
+		two.setLayoutX(850);
+		two.setLayoutY(416);
+		ImageView three = new ImageView();
+		three.setImage(new Image("file:src/image/three-1.png"));
+		three.setFitWidth(45);
+		three.setFitHeight(45);
+		three.setLayoutX(850);
+		three.setLayoutY(333);
+		ImageView four = new ImageView();
+		four.setImage(new Image("file:src/image/four-1.png"));
+		four.setFitWidth(45);
+		four.setFitHeight(45);
+		four.setLayoutX(850);
+		four.setLayoutY(245);
+		ImageView five = new ImageView();
+		five.setImage(new Image("file:src/image/five-1.png"));
+		five.setFitWidth(45);
+		five.setFitHeight(45);
+		five.setLayoutX(850);
+		five.setLayoutY(156);
+		ImageView six = new ImageView();
+		six.setImage(new Image("file:src/image/six-1.png"));
+		six.setFitWidth(45);
+		six.setFitHeight(45);
+		six.setLayoutX(850);
+		six.setLayoutY(68);
+		
+		ImageView one_b = new ImageView();
+		one_b.setImage(new Image("file:src/image/g_non.jpg"));
+		one_b.setFitWidth(45);
+		one_b.setFitHeight(65);
+		one_b.setLayoutX(340);
+		one_b.setLayoutY(509);
+		ImageView two_b = new ImageView();
+		two_b.setImage(new Image("file:src/image/g_non.jpg"));
+		two_b.setFitWidth(45);
+		two_b.setFitHeight(65);
+		two_b.setLayoutX(340);
+		two_b.setLayoutY(420);
+		ImageView three_b = new ImageView();
+		three_b.setImage(new Image("file:src/image/g_non.jpg"));
+		three_b.setFitWidth(45);
+		three_b.setFitHeight(65);
+		three_b.setLayoutX(340);
+		three_b.setLayoutY(333);
+		ImageView four_b = new ImageView();
+		four_b.setImage(new Image("file:src/image/g_non.jpg"));
+		four_b.setFitWidth(45);
+		four_b.setFitHeight(65);
+		four_b.setLayoutX(340);
+		four_b.setLayoutY(248);
+		ImageView five_b = new ImageView();
+		five_b.setImage(new Image("file:src/image/g_non.jpg"));
+		five_b.setFitWidth(45);
+		five_b.setFitHeight(65);
+		five_b.setLayoutX(340);
+		five_b.setLayoutY(160);
+		ImageView six_b = new ImageView();
+		six_b.setImage(new Image("file:src/image/g_non.jpg"));
+		six_b.setFitWidth(45);
+		six_b.setFitHeight(65);
+		six_b.setLayoutX(340);
+		six_b.setLayoutY(70);
+				
+		init_ele();
+				
+		/************************ set background **************************/
+
+		/************************ display background **************************/
+		pane().getChildren().add(bg);
+		pane().getChildren().add(floors);
+		pane().getChildren().add(one);
+		pane().getChildren().add(two);
+		pane().getChildren().add(three);
+		pane().getChildren().add(four);
+		pane().getChildren().add(five);
+		pane().getChildren().add(six);
+		pane().getChildren().add(ele);
+		pane().getChildren().add(one_b);
+		pane().getChildren().add(two_b);
+		pane().getChildren().add(three_b);
+		pane().getChildren().add(four_b);
+		pane().getChildren().add(five_b);
+		pane().getChildren().add(six_b);
+		/************************ display background **************************/
+		
+		//¤£ª¾¹D¬°¤°»òªñ¸ò¥X¤£¯à¤@°_Åã¥Ü
+		/****psg enter elevator animation demo****/
+		upTo2();
+		newTo2();
+		loc1();
+		enter(image[i]);
+		addToPane();
+		
+		newTo3();
+		loc2();
+		enter(image[i]);
+		addToPane();
+		/****psg enter elevator animation demo****/
+		
+		/****psg leave elevator animation demo****/
+		upTo2();
+		newTo1_out();
+		leave(image_out[j]);
+		addToPane();
+		newTo2_out();
+		leave(image_out[j]);
+		addToPane();
+		/****psg leave elevator animation demo****/
+		
+		
+		stage = primaryStage;
+		primaryStage.setScene(scene());
+		primaryStage.show();
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+}
+
+/*
+probably useful tools:
+	Bounds boundsInScene = img.localToScene(img.getBoundsInLocal());
+	System.out.println(boundsInScene.getMaxX());
+		
+*/
