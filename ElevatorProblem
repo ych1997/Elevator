@@ -1,0 +1,982 @@
+package application;
+import javafx.animation.TranslateTransition;
+import javafx.animation.SequentialTransition;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.geometry.Bounds;
+import java.util.Random;
+import java.util.Scanner;
+
+
+
+import java.util.Arrays;
+
+	 public class ElevatorProblem extends Application {
+	//	Test move;
+		public static boolean move;
+		public Scene scene;
+		public Stage stage;
+		public static Pane pane;
+		public static ImageView ele = new ImageView();
+		//TranslateTransition static move_ele = new TranslateTransition(); //elevator goes up and down
+		// i'm not sure whether the elevator should be global or local. 
+		// so i also leave declarations in each method concerned.
+		public static ImageView[] image = new ImageView[1000] ; // psgrs_in
+		public static ImageView[] button = new ImageView[2000];
+		final static Text text = new Text();
+
+		public static int i,j = 0;
+		
+		public Scene scene() {
+			if (scene==null){
+				scene = new Scene(pane(), 900, 650);
+			}
+			return scene;
+		}
+		public static Pane pane() {
+			if (pane==null) {
+				pane = new Pane();
+			}
+			return pane;
+		}
+		
+		public static ImageView image(int index) { //嚙踐暑���芍��謋踝蕭�嚙踐�嚙踝蕭謒��蕭謕景H
+			if (image[index]==null) {
+				image[index] = new ImageView();
+			}
+			return image[index];
+		}
+		
+		public static ImageView button(int index) { // create button when psg is created
+			if (button[index]==null) {
+				button[index] = new ImageView();
+			}
+			return button[index];
+		}
+		
+
+		
+	/******************************Enter the Elevator******************************/	
+		public static void loc(int from,int to,int dir, int index) {  //���嚙踝蕭雓�蕭豲嚙踝蕭�謇勗����蕭嚙踝蕭�嚙踐�嚙踝蕭�嚙踝蕭(������蕭��雓ｇ蕭嚙踝蕭豯剁���蕭豯株嚙踝蕭��蕭���飭嚙踐)���蕭謜雓�蕭豲嚙踝蕭�謇勗��蕭����蕭
+			image[index] = image(index);
+			if(to==1) {
+				image[index].setImage(new Image("file:src/image/hedgehog1.png"));
+				image[index].setFitWidth(70);
+				image[index].setFitHeight(73);
+			}else if(to==2) {
+				image[index].setImage(new Image("file:src/image/whale2.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+			}else if(to==3) {
+				image[index].setImage(new Image("file:src/image/pig3.png"));
+				image[index].setFitWidth(78);
+				image[index].setFitHeight(78);
+			}else if(to==4) {
+				image[index].setImage(new Image("file:src/image/fox4.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+			}else if(to==5) {
+				image[index].setImage(new Image("file:src/image/chick5.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+			}else if(to==6) {
+				image[index].setImage(new Image("file:src/image/koala6.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+			}
+
+			if(from == 1) {
+			image[index].setLayoutX(300);
+			image[index].setLayoutY(505);
+			}
+			else if(from == 2) {
+			image[index].setLayoutX(300);
+			image[index].setLayoutY(420);
+			}
+			else if(from == 3) {
+			image[index].setLayoutX(300);
+			image[index].setLayoutY(330);
+			}
+			else if(from == 4) {
+			image[index].setLayoutX(300);
+			image[index].setLayoutY(245);
+			}
+			else if(from == 5) {
+			image[index].setLayoutX(300);
+			image[index].setLayoutY(155);
+			}
+			else if(from == 6) {
+			image[index].setLayoutX(300);
+			image[index].setLayoutY(65);
+			}
+			addToPane(index);
+		//	pane().getChildren().add(image[0]);
+		}
+		
+		public static void lit(int arr[][], int f,int index) {  
+			
+			button[index] = button(index);
+			if (arr[f][0]==1&&arr[f][1]==0) {
+			//	System.out.println("HI!!!!");
+				button[index].setImage(new Image("file:src/image/g_up.jpg"));
+			}
+			else if(arr[f][0]==0&&arr[f][1]==1) {
+			//	System.out.println("HI!!!!");
+				button[index].setImage(new Image("file:src/image/g_down.jpg"));
+			}
+			else if(arr[f][0]==0&&arr[f][1]==0) {
+		//		System.out.println("HI!!!!");
+				button[index].setImage(new Image("file:src/image/g_non.jpg"));
+			}
+			else if(arr[f][0]==1&&arr[f][1]==1){
+			//	System.out.println("HI!!!!");
+				button[index].setImage(new Image("file:src/image/g_both.jpg"));
+			}
+			button[index].setFitWidth(45);
+			button[index].setFitHeight(65);
+			
+			if(f == 0) {
+			button[index].setLayoutX(250);
+			button[index].setLayoutY(509);
+			}
+			else if(f== 1) {
+			button[index].setLayoutX(250);
+			button[index].setLayoutY(420);
+			}
+			else if(f == 2) {
+			button[index].setLayoutX(250);
+			button[index].setLayoutY(333);
+			}
+			else if(f == 3) {
+			button[index].setLayoutX(250);
+			button[index].setLayoutY(248);
+			}
+			else if(f == 4) {
+			button[index].setLayoutX(250);
+			button[index].setLayoutY(160);
+			}
+			else if(f == 5) {
+			button[index].setLayoutX(250);
+			button[index].setLayoutY(70);
+			}
+			addToPane_button(index);
+		//	pane().getChildren().add(image[0]);
+		}
+		
+		public static void setToTransparent() {
+			
+		}
+
+	
+		public static void addToPane(int index) {  //�獢�����蕭豱餃��芍��謋賡��蕭��蕭��]�������������蕭謕景H��撕��������嚙踐景W
+			Platform.runLater(()->{
+				pane().getChildren().add(image[index]);});
+		}
+		
+		public static void addToPane_button(int index) { 
+			Platform.runLater(()->{
+				pane().getChildren().add(button[index]);});
+		}
+		public static void addToPane_text() { 
+			Platform.runLater(()->{
+				pane().getChildren().add(text);});
+		}
+	/******************************Enter the Elevator******************************/	
+		
+	/******************************Leave the Elevator******************************/
+	/**There are no "locX" when leaving elevator because each kind of animal appears at its own exit**/
+		public static void new_in(int from, int to, int index) {
+			image[index] = image(index);
+			if(from == 1) {
+				image[index].setLayoutY(505);				
+			}
+			else if(from == 2){
+				image[index].setLayoutY(420);
+			}
+			else if(from == 3) {
+				image[index].setLayoutY(330);
+			}
+			else if(from == 4) {
+				image[index].setLayoutY(245);
+			}
+			else if(from == 5) {
+				image[index].setLayoutY(155);
+			}
+			else if(from == 6) {
+				image[index].setLayoutY(65);
+			}
+			if (to==1) {
+				image[index].setImage(new Image("file:src/image/hedgehog1.png"));
+				image[index].setFitWidth(70);
+				image[index].setFitHeight(73);
+			}else if(to==2) {
+				image[index].setImage(new Image("file:src/image/whale2.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+			}else if(to==3) {
+				image[index].setImage(new Image("file:src/image/pig3.png"));
+				image[index].setFitWidth(78);
+				image[index].setFitHeight(78);
+			}else if(to==4) {
+				image[index].setImage(new Image("file:src/image/fox4.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+			}else if(to==5) {
+				image[index].setImage(new Image("file:src/image/chick5.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+			}else if(to==6) {
+				image[index].setImage(new Image("file:src/image/koala6.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+			}
+			image[index].setLayoutX(300);
+			//pane().getChildren().add(image[index]);
+		}
+		
+
+	/******************************Leave the Elevator******************************/		
+		public static void new_out(int to, int index) {
+			image[index] = image(index);
+			if (to==1) {
+				image[index].setImage(new Image("file:src/image/hedgehog1.png"));
+				image[index].setFitWidth(70);
+				image[index].setFitHeight(73);
+				image[index].setLayoutY(505);
+			//	System.out.println("new_out to "+to+" index "+index);
+						
+			}else if(to==2) {
+				image[index].setImage(new Image("file:src/image/whale2.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+				image[index].setLayoutY(420);
+			//	System.out.println("new_out to "+to+" index "+index);
+						
+			}else if(to==3) {
+				image[index].setImage(new Image("file:src/image/pig3.png"));
+				image[index].setFitWidth(78);
+				image[index].setFitHeight(78);
+				image[index].setLayoutY(330);
+			//	System.out.println("new_out to "+to+" index "+index);
+						
+			}else if(to==4) {
+				image[index].setImage(new Image("file:src/image/fox4.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+				image[index].setLayoutY(245);
+		//		System.out.println("new_out to "+to+" index "+index);
+						
+			}else if(to==5) {
+				image[index].setImage(new Image("file:src/image/chick5.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+				image[index].setLayoutY(155);
+		//		System.out.println("new_out to "+to+" index "+index);
+					
+			}else if(to==6) {
+				image[index].setImage(new Image("file:src/image/koala6.png"));
+				image[index].setFitWidth(80);
+				image[index].setFitHeight(80);
+				image[index].setLayoutY(65);
+		//		System.out.println("new_out to "+to+" index "+index);
+				
+			}	
+			image[index].setLayoutX(320);
+			//pane().getChildren().add(image[index]);
+		}
+		
+		public static void print_outNum(int numOut, int floor) {
+			String string, n, f;
+			if(numOut==0 && floor==0) {
+				string = "  people arrived at   floor.";
+			}
+			else {
+				n = Integer.toString(numOut);
+				f = Integer.toString(floor);
+				string = n+" people arrived at "+f+" floor.";
+			}
+			text.setText(string);
+			text.setFont(Font.font ("Courier", 25));
+			text.setFill(Color.DARKVIOLET);
+			text.setX(480);
+			text.setY(45);
+			//Group group = new Group();
+			addToPane_text();
+		}
+	/******************************Elevator move_ele******************************/	
+		public static void up(int now_floor) {  //嚙踐暑H嚙踐景@�撠嚙踝蕭蹇嚙踝蕭謚迎蕭�瘣抒��蕭�嚙踐策豱斡嚙踐景���蕭��﹝�������蕭蹇蕭蹓踝蕭���蕭��嚙�
+			TranslateTransition move_ele = new TranslateTransition();
+		if(now_floor==1) {
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(-90);
+			move_ele.play();
+			//move_ele.setOnFinished(e->upTo3());  //�����嚙踝蕭蹇�蕭嚙踐��高嚙踝蕭��R�嚙質嚙�
+		}
+		else if(now_floor==2) {
+			//TranslateTransition move_ele = new TranslateTransition();
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(-180);
+			move_ele.play();
+		//	move_ele.setOnFinished(e->upTo4());
+		}
+		else if(now_floor==3) {
+			//TranslateTransition move_ele = new TranslateTransition();
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(-270);
+			move_ele.play();
+	//		move_ele.setOnFinished(e->upTo5());
+		}
+		else if(now_floor==4) {
+			//TranslateTransition move_ele = new TranslateTransition();
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(-360);
+			move_ele.play();
+		//	move_ele.setOnFinished(e->upTo6());
+		}
+		else if(now_floor==5) {
+			//TranslateTransition move_ele = new TranslateTransition();
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(-450);
+			move_ele.play();
+	//		move_ele.setOnFinished(e->downTo5());
+		}	
+		}
+		
+		public static void down(int now_floor) {
+			TranslateTransition move_ele = new TranslateTransition();
+			
+			if(now_floor==6) {
+			//TranslateTransition move_ele = new TranslateTransition();
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(-360);
+			move_ele.play();
+		//	move_ele.setOnFinished(e->downTo4());
+		
+		}
+			else if(now_floor==5) {
+			//TranslateTransition move_ele = new TranslateTransition();
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(-270);
+			move_ele.play();
+			//move_ele.setOnFinished(e->downTo3());
+		}
+		else if(now_floor==4) {
+			//TranslateTransition move_ele = new TranslateTransition();
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(-180);
+			move_ele.play();
+			//move_ele.setOnFinished(e->downTo2());
+		}
+	
+			else if(now_floor==3) {
+			//TranslateTransition move_ele = new TranslateTransition();
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(-90);
+			move_ele.play();
+		//	move_ele.setOnFinished(e->downTo1());
+		}
+
+			else if(now_floor==2) {
+			//TranslateTransition move_ele = new TranslateTransition();
+			move_ele.setNode(ele);
+			move_ele.setCycleCount(1);
+			move_ele.setDuration(Duration.seconds(1));
+			move_ele.setToY(0);
+			move_ele.play();
+		}
+		}
+/******************************Elevator move_ele******************************/
+
+	/*******************psg enter/leave the elevator*******************/
+		public static void enter(int index) {  
+		//	System.out.println("enter");
+			
+			TranslateTransition move_enter = new TranslateTransition();
+			move_enter.setNode(image[index]);
+			move_enter.setCycleCount(1);
+			move_enter.setDuration(Duration.seconds(1));
+			move_enter.setToX(110);
+			move_enter.play();
+			// cancel the button of image[index]
+		}
+		
+		public static void disappear(int f,int n,int arr[][]) {  
+			for(int i=0;i<n;i++) {
+				if(arr[i][0]==f) {
+					image[arr[i][3]].setImage(null);
+				}
+			}
+		//	System.out.println("!!!!");
+				
+		}
+		
+		public static void leave(int index) {  
+	//		System.out.println("leave");
+			TranslateTransition move_enter = new TranslateTransition();
+			move_enter.setNode(image[index]);
+			move_enter.setCycleCount(1);
+			move_enter.setDuration(Duration.seconds(5));
+			move_enter.setToX(1000);
+			move_enter.play();
+		}
+	/*******************psg enter/leave the elevator*******************/	
+		
+		
+		
+		
+	/*****************delete object*******************/
+		//嚙踐暑i嚙踐暑H����嚙質��g���嚙踝蕭謅蕭銵蕭��蕭蹓踝蕭��蕭�����蕭������忠�撠嚙踐���
+		public static void deleteObj(ImageView img) {
+			pane.getChildren().remove(img);
+		}
+	/*****************delete object*******************/
+
+
+
+		public static void init_ele() {
+			ele.setImage(new Image("file:src/image/elevator.png"));  //
+			ele.setFitWidth(100);
+			ele.setFitHeight(90);
+			ele.setLayoutX(400);
+			ele.setLayoutY(505);
+		}
+		
+
+		@Override
+		public void start(Stage primaryStage) {
+			/************************ set background **************************/
+			ImageView bg = new ImageView();
+			bg.setImage(new Image("file:src/image/roughGray.jpg"));
+			bg.setFitWidth(900);
+			bg.setFitHeight(700);
+			bg.setLayoutY(0);
+			
+			ImageView floors = new ImageView();
+			floors.setImage(new Image("file:src/image/floors.png"));
+			floors.setFitWidth(900);
+			floors.setFitHeight(600);
+			floors.setLayoutY(20);
+			
+			ImageView one = new ImageView();
+			one.setImage(new Image("file:src/image/one-1.png"));
+			one.setFitWidth(45);
+			one.setFitHeight(45);
+			one.setLayoutX(850);
+			one.setLayoutY(509);
+			ImageView two = new ImageView();
+			two.setImage(new Image("file:src/image/two-1.png"));
+			two.setFitWidth(45);
+			two.setFitHeight(45);
+			two.setLayoutX(850);
+			two.setLayoutY(416);
+			ImageView three = new ImageView();
+			three.setImage(new Image("file:src/image/three-1.png"));
+			three.setFitWidth(45);
+			three.setFitHeight(45);
+			three.setLayoutX(850);
+			three.setLayoutY(333);
+			ImageView four = new ImageView();
+			four.setImage(new Image("file:src/image/four-1.png"));
+			four.setFitWidth(45);
+			four.setFitHeight(45);
+			four.setLayoutX(850);
+			four.setLayoutY(245);
+			ImageView five = new ImageView();
+			five.setImage(new Image("file:src/image/five-1.png"));
+			five.setFitWidth(45);
+			five.setFitHeight(45);
+			five.setLayoutX(850);
+			five.setLayoutY(156);
+			ImageView six = new ImageView();
+			six.setImage(new Image("file:src/image/six-1.png"));
+			six.setFitWidth(45);
+			six.setFitHeight(45);
+			six.setLayoutX(850);
+			six.setLayoutY(68);
+			
+			ImageView one_b = new ImageView();
+			one_b.setImage(new Image("file:src/image/g_non.jpg"));
+			one_b.setFitWidth(45);
+			one_b.setFitHeight(65);
+			one_b.setLayoutX(250);
+			one_b.setLayoutY(509);
+			ImageView two_b = new ImageView();
+			two_b.setImage(new Image("file:src/image/g_non.jpg"));
+			two_b.setFitWidth(45);
+			two_b.setFitHeight(65);
+			two_b.setLayoutX(250);
+			two_b.setLayoutY(420);
+			ImageView three_b = new ImageView();
+			three_b.setImage(new Image("file:src/image/g_non.jpg"));
+			three_b.setFitWidth(45);
+			three_b.setFitHeight(65);
+			three_b.setLayoutX(250);
+			three_b.setLayoutY(333);
+			ImageView four_b = new ImageView();
+			four_b.setImage(new Image("file:src/image/g_non.jpg"));
+			four_b.setFitWidth(45);
+			four_b.setFitHeight(65);
+			four_b.setLayoutX(250);
+			four_b.setLayoutY(248);
+			ImageView five_b = new ImageView();
+			five_b.setImage(new Image("file:src/image/g_non.jpg"));
+			five_b.setFitWidth(45);
+			five_b.setFitHeight(65);
+			five_b.setLayoutX(250);
+			five_b.setLayoutY(160);
+			ImageView six_b = new ImageView();
+			six_b.setImage(new Image("file:src/image/g_non.jpg"));
+			six_b.setFitWidth(45);
+			six_b.setFitHeight(65);
+			six_b.setLayoutX(250);
+			six_b.setLayoutY(70);
+			
+
+			
+			init_ele();
+				
+			/************************ set background **************************/
+
+			/************************ display background **************************/
+			pane().getChildren().add(bg);
+			pane().getChildren().add(floors);
+			pane().getChildren().add(one);
+			pane().getChildren().add(two);
+			pane().getChildren().add(three);
+			pane().getChildren().add(four);
+			pane().getChildren().add(five);
+			pane().getChildren().add(six);
+			pane().getChildren().add(ele);
+			pane().getChildren().add(one_b);
+			pane().getChildren().add(two_b);
+			pane().getChildren().add(three_b);
+			pane().getChildren().add(four_b);
+			pane().getChildren().add(five_b);
+			pane().getChildren().add(six_b);
+			/************************ display background **************************/
+			
+
+		
+			stage = primaryStage;
+			primaryStage.setScene(scene());
+			primaryStage.show();
+	//		System.out.println("Hi");
+		}
+		
+	
+	
+		/*public static void main(String[] args) {
+			launch(args);
+			//test.main(args);
+		}*/
+
+
+ 	public static class Test{
+		
+	
+ 	public static void main(String args[]){
+ 		
+ 	//	move.launch(args);
+ 				Elevator elevator = new Elevator();
+
+ 				elevator.setFloor(6);
+
+ 				Thread ProducerThread = new Thread(new Producer(elevator));
+
+ 				Thread ConsumerTread = new Thread(new Consumer(elevator));
+ 				ProducerThread.start();
+ 				ConsumerTread.start();
+ 				
+ 			Application.launch(ElevatorProblem.class, args);
+ 		
+ 			}
+ 	}
+	public static class Producer implements Runnable{
+		private static Elevator elevator;
+
+		public Producer(Elevator elevator){
+			this.elevator=elevator;
+		}
+		public void run(){
+			
+			elevator.start();
+		
+		}
+	}
+	public static class Consumer implements Runnable{
+		private Elevator e;
+		Random ran=new Random();
+		public Consumer(Elevator e){
+			this.e=e;
+		}
+		public void run(){
+			while(true){
+				int x = Poisson(5.0)*500;
+			try{
+					Thread.sleep(x);
+			}
+			catch(InterruptedException e){
+				e.printStackTrace();
+			}
+			int[] temp=new int [4];
+			temp[0]=ran.nextInt(e.getFloor())+1;
+			temp[1]=ran.nextInt(e.getFloor())+1;
+			while(temp[0]==temp[1]){
+				temp[1]=ran.nextInt(e.getFloor())+1;
+			}
+			if(temp[1]-temp[0]>0){
+				temp[2]=1;
+			}
+			else{
+				temp[2]=-1;
+			}
+			e.setConsumer(temp);
+
+		}
+	
+	}
+}
+	public static int Poisson(double lambda){
+		double L = Math.exp(-lambda);
+		double p =1.0;
+		int k=0;
+		while(true) {
+			p=p*Math.random();
+			k++;
+			if(p<=L) {
+				break;
+			}
+		}			
+		return k-1;
+	}
+
+
+public static class Elevator{
+	private int[][] user_inf=new int [1000][4]; //嚙踝蕭������蕭嚙踐�雓蕭嚙踝蕭�嚙踐�嚙踝蕭�嚙踝蕭 0:�������蕭嚙踐�嚙踝蕭�謇堆蕭嚙踐鬼嚙踐���蕭嚙踝蕭�� 1:嚙踐��陷�����蕭嚙踐�嚙踝蕭�謇堆蕭嚙踝蕭 2:���蕭�����(嚙踝蕭豲蕭蹐雓陷���蕭) 3:���嚙踝蕭謍莎蕭��ㄡ���嚙踝蕭謖雓Ｗ�遙
+	private int[][] in_Ele = new int [1000][4]; //������縣嚙踝蕭���蕭嚙踐����蕭�嚙踝蕭 嚙踐嚙踐ㄡ鞊堆����ㄜ���
+ 	public int[][] ele_button=new int [6][2];
+ 	public int button_index=0;
+	int Waiting=0,Floor_Num=0,index=0,num_in_ele=0,out_index=0;
+	int now_floor=1,Direction=0,count=0,pre_floor=0;
+	public synchronized void setConsumer(int[] arr){
+		user_inf[Waiting][0]=arr[0];
+		user_inf[Waiting][1]=arr[1];
+		user_inf[Waiting][2]=arr[2];
+		user_inf[Waiting][3]=index;
+		int tmp=0;
+		if(arr[2]==1) {
+			tmp=0;
+		}
+		else {
+			tmp=1;
+		}
+		if(ele_button[user_inf[Waiting][0]-1][tmp]==0) {
+			ele_button[user_inf[Waiting][0]-1][tmp]=1;
+			lit(ele_button,user_inf[Waiting][0]-1,button_index);
+			button_index++;
+		}
+		
+		//System.out.println("Set! "+user_inf[Waiting][0]+" "+user_inf[Waiting][1]+" "+user_inf[Waiting][2]+" "+user_inf[Waiting][3]);
+		loc(user_inf[Waiting][0],user_inf[Waiting][1],user_inf[Waiting][2],user_inf[Waiting][3]);
+		
+		Waiting++;
+		index++;
+		
+	}
+	public void setFloor(int a){
+		Floor_Num=a;
+	}
+	public int getFloor(){
+		return Floor_Num;
+	}
+	public synchronized boolean go_up(){
+		for(int i=0;i<Waiting;i++){
+			if(user_inf[i][0]>=now_floor){
+				return true;
+			}
+		}
+		return false;
+	}
+	public synchronized boolean go_down(){
+		for(int i=0;i<Waiting;i++){
+			if(user_inf[i][0]<=now_floor){
+				return true;
+			}
+		}
+		return false;
+	}
+	public synchronized void check_out(){  //嚙踝蕭�嚙踐�蕭���蹓鳴嚙踐迤��蕭
+		boolean get_off=false;
+		int num_out=0;
+		for(int i=0;i<num_in_ele;i++){
+			//System.out.println(now_floor+" "+user_inf[i][0]+" "+user_inf[i][2]+" "+Direction);
+		
+			if(in_Ele[i][1]==now_floor){
+				System.out.println("Number "+in_Ele[i][3]+" get off elevator");
+				new_out(in_Ele[i][1],in_Ele[i][3]);
+				leave(in_Ele[i][3]);
+				sleep(100);
+				for(int j=i;j<=num_in_ele;j++){
+					 System.arraycopy(in_Ele[j+1],0,in_Ele[j],0,4);
+				}
+		//		System.out.println("check_out");
+				num_in_ele--;
+				num_out++;
+				get_off=true;
+				i=-1;
+			}
+		}
+		if(get_off==true){
+	//		print_outNum(num_out, now_floor);
+			out_index++;
+			sleep(700);
+			}
+	}
+	public synchronized void up_in(){  //嚙踐���嚙踝嚙踐�蕭�嚙賡��蕭���蹓選蕭�謆���蕭
+		boolean get_in=false;
+		for(int i=0;i<Waiting;i++){
+		//	System.out.println(now_floor+" "+user_inf[i][0]+" "+user_inf[i][2]+" "+Direction);
+			if(user_inf[i][0]==now_floor && user_inf[i][2]==Direction){
+				System.out.println("Number "+user_inf[i][3]+" get in elevator");
+				new_in(user_inf[i][0],user_inf[i][1],user_inf[i][3]);
+				enter(user_inf[i][3]);
+				//deleteObj(button[user_inf[i][3]]);
+				System.arraycopy(user_inf[i],0,in_Ele[num_in_ele],0,4);
+				num_in_ele++;
+				sleep(100);
+				for(int j=i;j<Waiting;j++){
+					System.arraycopy(user_inf[j+1],0,user_inf[j],0,4);
+				}
+				get_in=true;
+				Waiting--;
+				i=-1;
+		}
+		}
+		if(get_in==true){
+			ele_button[now_floor-1][0]=0;
+			lit(ele_button,now_floor-1,button_index);
+			button_index++;
+			sleep(800);		
+		}	
+	}
+
+	public synchronized void down_in(){ //嚙踐���嚙踝嚙踐�蕭�嚙賡��蕭���蹓選蕭�謆���蕭
+		
+		boolean get_in=false;
+		for(int i=0;i<Waiting;i++){
+		//	System.out.println(now_floor+" "+user_inf[i][0]+" "+user_inf[i][2]+" "+Direction);
+			if(user_inf[i][0]==now_floor&&user_inf[i][2]==Direction/*!!!*/){
+				System.out.println("Number "+user_inf[i][3]+" get in elevator");
+				new_in(user_inf[i][0],user_inf[i][1],user_inf[i][3]);
+				enter(user_inf[i][3]);
+				//deleteObj(button[user_inf[i][3]]);
+				sleep(100);
+				get_in=true;
+				System.arraycopy(user_inf[i],0,in_Ele[num_in_ele],0,4);
+				num_in_ele++;
+				for(int j=i;j<Waiting;j++){
+					System.arraycopy(user_inf[j+1],0,user_inf[j],0,4);
+				}
+				Waiting--;
+				i=-1;	
+			}
+		}
+		if(get_in==true){
+			ele_button[now_floor-1][1]=0;
+			lit(ele_button,now_floor-1,button_index);
+			button_index++;
+			sleep(800);
+		}	
+	}
+
+	public synchronized boolean up_user(){//嚙踐���蕭蹓選蕭豲蕭��蕭�����蕭�嚙踐�������蕭��嚙踐���嚙踝蕭謖雓蕭嚙踝蕭��
+		for(int i=0;i<Waiting;i++){
+			if(user_inf[i][0]>now_floor){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public synchronized boolean down_user(){//嚙踐���蕭蹓選蕭豲�掠�����蕭�嚙踐�������蕭��嚙踐���嚙踝蕭謖雓蕭嚙踝蕭��
+		for(int i=0;i<Waiting;i++){
+			if(user_inf[i][0]<now_floor){
+				return true;
+			}
+		}
+		return false;
+	}
+	public void start(){
+		while(true){
+		if(Direction==0){
+			if(Waiting==0){
+				//System.out.println("Elevator stay at "+now_floor+" floor");
+				move=false;
+				//sleep(1000);
+			}
+			else{
+				if(go_up()==true){ //嚙踝蕭��蕭謕雓�嚙踝蕭��蕭������蕭嚙踐�謘��蕭謖雓蕭嚙踝蕭��					
+					Direction=1;
+				}
+				else if(go_down()==true){ //嚙踝蕭��蕭謕雓�嚙踐�掠������蕭嚙踐�謘��蕭謖雓蕭嚙踝蕭��
+					Direction=-1;
+				}
+			}
+		}
+		else if(Direction==1){ 
+			move=true;
+		//	System.out.println("Elevator arrive at "+now_floor+" floor (go up)");
+			check_out();//check if anyone arrive their floor
+			if(go_up()==true){
+			//	System.out.println("go_up");
+				up_in();
+				if(num_in_ele==0&&up_user()==false){
+					Direction=-1;
+					down_in();
+					}	
+			}
+			else if(Waiting==0&&num_in_ele==0){ 
+				//now_floor--;
+				Direction=0;
+				move=false;
+			}
+			else if(go_up()==false&&down_user()==true&&num_in_ele==0){
+			//	System.out.println("ooo");
+				Direction=-1;
+			}
+	//	System.out.println(Direction+" "+now_floor);
+			if(move==true) {
+				if(Direction==1) {
+					up(now_floor);
+				}
+				else if(Direction==-1) {
+					down(now_floor);
+		//			System.out.println(now_floor+" now_floor");
+				}
+			}
+			pre_floor=now_floor;
+			now_floor+=Direction;
+			if(now_floor>=Floor_Num){
+				now_floor=Floor_Num;
+				Direction=-1;
+				up(now_floor-1);
+			}
+		}
+		else if(Direction==-1){
+		//	System.out.println("Elevator arrives at "+now_floor+" floor (go down)");
+			check_out();
+			move=true;
+			if(go_down()==true){ //嚙踝蕭��蕭謕雓�嚙踐�掠������蕭嚙踐�謘��蕭謖雓蕭嚙踝蕭��
+			//	System.out.println("go_down");
+				down_in();
+				if(num_in_ele==0&&down_user()==false){
+					Direction=1;
+					up_in();
+				}
+			}
+			else if(Waiting==0&&num_in_ele==0){ //嚙踝蕭豲蕭��嚙踐�蕭嚙踐�雓�蕭����蕭嚙踝蕭�� ���ㄜ���蕭��縣嚙踝蕭���蕭嚙踐�蕭豲蕭��嚙踐�蕭嚙踝蕭 ���縣嚙踝蕭�����頩蕭
+				Direction=0;
+				move=false;
+				//now_floor++;
+			}
+			else if(go_down()==false&&up_user()==true&&num_in_ele==0){
+				//System.out.println("ooo");
+				Direction=1;
+			}
+			
+			if(move==true) {
+				if(Direction==1) {
+					up(now_floor);
+				}
+				else if(Direction==-1){
+					down(now_floor);
+				}
+			}
+			pre_floor=now_floor;
+			now_floor+=Direction;
+			if(now_floor<=1){
+				Direction=1;
+				now_floor=1;
+				down(now_floor+1);
+			}
+		}
+		Print();
+		count++;
+		sleep(200);
+		disappear(pre_floor,num_in_ele,in_Ele);
+		sleep(700); 
+		}	
+	}
+	public void Print(){
+		System.out.println("******************");
+		System.out.println("Time: "+count);
+		for(int i=0;i<Floor_Num;i++){
+			if(i!=now_floor-1){
+				System.out.print(" ");
+			}
+			else
+				System.out.print("E");
+		}
+		System.out.print("\n");
+		for(int i=0;i<Floor_Num;i++){
+			System.out.print("-");
+		}
+		System.out.print("\n");
+		System.out.println("Passanger(in elevator):");
+		for(int i=0;i<num_in_ele;i++){
+			System.out.println("Number "+in_Ele[i][3]+" from "+in_Ele[i][0]+" to "+in_Ele[i][1]);
+		}
+		System.out.println("Waiting in line:");
+		for(int i=0;i<Waiting;i++){
+			System.out.print("Number "+user_inf[i][3]+" wait at "+user_inf[i][0]+" floor");
+			if(user_inf[i][2]==1){
+				System.out.println("(up)");
+			}
+			else{
+				System.out.println("(down)");
+			}
+
+		}
+		System.out.println("******************");
+	}
+	public void sleep(int a){
+		try {
+			Thread.sleep(a);
+		} 
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+}
