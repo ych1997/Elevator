@@ -178,7 +178,7 @@ import java.util.Arrays;
 		}
 
 	
-		public static void addToPane(int index) {  //�獢�����蕭豱餃��芍��謋賡��蕭��蕭��]�������������蕭謕景H��撕��������嚙踐景W
+		public static void addToPane(int index) {  
 			Platform.runLater(()->{
 				pane().getChildren().add(image[index]);});
 		}
@@ -308,7 +308,7 @@ import java.util.Arrays;
 
 		}
 	/******************************Elevator move_ele******************************/	
-		public static void up(int now_floor) {  //嚙踐暑H嚙踐景@�撠嚙踝蕭蹇嚙踝蕭謚迎蕭�瘣抒��蕭�嚙踐策豱斡嚙踐景���蕭��﹝�������蕭蹇蕭蹓踝蕭���蕭��嚙�
+		public static void up(int now_floor) {  
 			TranslateTransition move_ele = new TranslateTransition();
 		if(now_floor==1) {
 			move_ele.setNode(ele);
@@ -316,7 +316,7 @@ import java.util.Arrays;
 			move_ele.setDuration(Duration.seconds(1));
 			move_ele.setToY(-90);
 			move_ele.play();
-			//move_ele.setOnFinished(e->upTo3());  //�����嚙踝蕭蹇�蕭嚙踐��高嚙踝蕭��R�嚙質嚙�
+			//move_ele.setOnFinished(e->upTo3());  
 		}
 		else if(now_floor==2) {
 			//TranslateTransition move_ele = new TranslateTransition();
