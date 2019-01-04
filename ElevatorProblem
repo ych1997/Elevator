@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
@@ -15,6 +16,7 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.geometry.Bounds;
 import java.util.Random;
 import java.util.Scanner;
@@ -30,12 +32,9 @@ import java.util.Arrays;
 		public Stage stage;
 		public static Pane pane;
 		public static ImageView ele = new ImageView();
-		//TranslateTransition static move_ele = new TranslateTransition(); //elevator goes up and down
-		// i'm not sure whether the elevator should be global or local. 
-		// so i also leave declarations in each method concerned.
 		public static ImageView[] image = new ImageView[1000] ; // psgrs_in
 		public static ImageView[] button = new ImageView[2000];
-		final static Text text = new Text();
+		public static Label text = new Label();
 
 		public static int i,j = 0;
 		
@@ -122,7 +121,6 @@ import java.util.Arrays;
 			image[index].setLayoutY(65);
 			}
 			addToPane(index);
-		//	pane().getChildren().add(image[0]);
 		}
 		
 		public static void lit(int arr[][], int f,int index) {  
@@ -189,10 +187,7 @@ import java.util.Arrays;
 			Platform.runLater(()->{
 				pane().getChildren().add(button[index]);});
 		}
-		public static void addToPane_text() { 
-			Platform.runLater(()->{
-				pane().getChildren().add(text);});
-		}
+
 	/******************************Enter the Elevator******************************/	
 		
 	/******************************Leave the Elevator******************************/
@@ -307,13 +302,10 @@ import java.util.Arrays;
 				f = Integer.toString(floor);
 				string = n+" people arrived at "+f+" floor.";
 			}
-			text.setText(string);
-			text.setFont(Font.font ("Courier", 25));
-			text.setFill(Color.DARKVIOLET);
-			text.setX(480);
-			text.setY(45);
-			//Group group = new Group();
-			addToPane_text();
+			
+			Platform.runLater(()->{
+				text.setText(string);});
+
 		}
 	/******************************Elevator move_ele******************************/	
 		public static void up(int now_floor) {  //嚙踐暑H嚙踐景@�撠嚙踝蕭蹇嚙踝蕭謚迎蕭�瘣抒��蕭�嚙踐策豱斡嚙踐景���蕭��﹝�������蕭蹇蕭蹓踝蕭���蕭��嚙�
@@ -451,17 +443,6 @@ import java.util.Arrays;
 		}
 	/*******************psg enter/leave the elevator*******************/	
 		
-		
-		
-		
-	/*****************delete object*******************/
-		//嚙踐暑i嚙踐暑H����嚙質��g���嚙踝蕭謅蕭銵蕭��蕭蹓踝蕭��蕭�����蕭������忠�撠嚙踐���
-		public static void deleteObj(ImageView img) {
-			pane.getChildren().remove(img);
-		}
-	/*****************delete object*******************/
-
-
 
 		public static void init_ele() {
 			ele.setImage(new Image("file:src/image/elevator.png"));  //
@@ -561,7 +542,11 @@ import java.util.Arrays;
 			six_b.setLayoutX(250);
 			six_b.setLayoutY(70);
 			
-
+			text.setText(" ");
+			text.setFont(Font.font ("Courier",FontWeight.BOLD, 25));
+			text.setTextFill(Color.OLIVE);
+			text.setLayoutX(530);
+			text.setLayoutY(13);
 			
 			init_ele();
 				
@@ -583,6 +568,7 @@ import java.util.Arrays;
 			pane().getChildren().add(four_b);
 			pane().getChildren().add(five_b);
 			pane().getChildren().add(six_b);
+			pane().getChildren().add(text);
 			/************************ display background **************************/
 			
 
@@ -593,13 +579,6 @@ import java.util.Arrays;
 	//		System.out.println("Hi");
 		}
 		
-	
-	
-		/*public static void main(String[] args) {
-			launch(args);
-			//test.main(args);
-		}*/
-
 
  	public static class Test{
 		
@@ -735,7 +714,7 @@ public static class Elevator{
 		}
 		return false;
 	}
-	public synchronized void check_out(){  //嚙踝蕭�嚙踐�蕭���蹓鳴嚙踐迤��蕭
+	public synchronized void check_out(){
 		boolean get_off=false;
 		int num_out=0;
 		for(int i=0;i<num_in_ele;i++){
@@ -757,12 +736,12 @@ public static class Elevator{
 			}
 		}
 		if(get_off==true){
-	//		print_outNum(num_out, now_floor);
+			print_outNum(num_out, now_floor);	
 			out_index++;
 			sleep(700);
 			}
 	}
-	public synchronized void up_in(){  //嚙踐���嚙踝嚙踐�蕭�嚙賡��蕭���蹓選蕭�謆���蕭
+	public synchronized void up_in(){ 
 		boolean get_in=false;
 		for(int i=0;i<Waiting;i++){
 		//	System.out.println(now_floor+" "+user_inf[i][0]+" "+user_inf[i][2]+" "+Direction);
@@ -770,7 +749,6 @@ public static class Elevator{
 				System.out.println("Number "+user_inf[i][3]+" get in elevator");
 				new_in(user_inf[i][0],user_inf[i][1],user_inf[i][3]);
 				enter(user_inf[i][3]);
-				//deleteObj(button[user_inf[i][3]]);
 				System.arraycopy(user_inf[i],0,in_Ele[num_in_ele],0,4);
 				num_in_ele++;
 				sleep(100);
@@ -790,7 +768,7 @@ public static class Elevator{
 		}	
 	}
 
-	public synchronized void down_in(){ //嚙踐���嚙踝嚙踐�蕭�嚙賡��蕭���蹓選蕭�謆���蕭
+	public synchronized void down_in(){ 
 		
 		boolean get_in=false;
 		for(int i=0;i<Waiting;i++){
@@ -799,7 +777,6 @@ public static class Elevator{
 				System.out.println("Number "+user_inf[i][3]+" get in elevator");
 				new_in(user_inf[i][0],user_inf[i][1],user_inf[i][3]);
 				enter(user_inf[i][3]);
-				//deleteObj(button[user_inf[i][3]]);
 				sleep(100);
 				get_in=true;
 				System.arraycopy(user_inf[i],0,in_Ele[num_in_ele],0,4);
@@ -819,7 +796,7 @@ public static class Elevator{
 		}	
 	}
 
-	public synchronized boolean up_user(){//嚙踐���蕭蹓選蕭豲蕭��蕭�����蕭�嚙踐�������蕭��嚙踐���嚙踝蕭謖雓蕭嚙踝蕭��
+	public synchronized boolean up_user(){
 		for(int i=0;i<Waiting;i++){
 			if(user_inf[i][0]>now_floor){
 				return true;
@@ -828,7 +805,7 @@ public static class Elevator{
 		return false;
 	}
 
-	public synchronized boolean down_user(){//嚙踐���蕭蹓選蕭豲�掠�����蕭�嚙踐�������蕭��嚙踐���嚙踝蕭謖雓蕭嚙踝蕭��
+	public synchronized boolean down_user(){
 		for(int i=0;i<Waiting;i++){
 			if(user_inf[i][0]<now_floor){
 				return true;
@@ -845,10 +822,10 @@ public static class Elevator{
 				//sleep(1000);
 			}
 			else{
-				if(go_up()==true){ //嚙踝蕭��蕭謕雓�嚙踝蕭��蕭������蕭嚙踐�謘��蕭謖雓蕭嚙踝蕭��					
+				if(go_up()==true){
 					Direction=1;
 				}
-				else if(go_down()==true){ //嚙踝蕭��蕭謕雓�嚙踐�掠������蕭嚙踐�謘��蕭謖雓蕭嚙踝蕭��
+				else if(go_down()==true){
 					Direction=-1;
 				}
 			}
@@ -896,7 +873,7 @@ public static class Elevator{
 		//	System.out.println("Elevator arrives at "+now_floor+" floor (go down)");
 			check_out();
 			move=true;
-			if(go_down()==true){ //嚙踝蕭��蕭謕雓�嚙踐�掠������蕭嚙踐�謘��蕭謖雓蕭嚙踝蕭��
+			if(go_down()==true){ 
 			//	System.out.println("go_down");
 				down_in();
 				if(num_in_ele==0&&down_user()==false){
@@ -904,7 +881,7 @@ public static class Elevator{
 					up_in();
 				}
 			}
-			else if(Waiting==0&&num_in_ele==0){ //嚙踝蕭豲蕭��嚙踐�蕭嚙踐�雓�蕭����蕭嚙踝蕭�� ���ㄜ���蕭��縣嚙踝蕭���蕭嚙踐�蕭豲蕭��嚙踐�蕭嚙踝蕭 ���縣嚙踝蕭�����頩蕭
+			else if(Waiting==0&&num_in_ele==0){
 				Direction=0;
 				move=false;
 				//now_floor++;
